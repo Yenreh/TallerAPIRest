@@ -22,13 +22,31 @@ router.post('/insertarpaciente', async (req, res) => {
   await pool.query(
     `INSERT INTO pacientes(nombre, apellido, numid) VALUES('${nombre}','${apellido}','${numid}')`
   );
-  res.json({ 'RES': 'INSERTADO' });
+  res.json('INSERTADO');
 });
 
 
 
 router.get('/consultatotalpacientes', async (req, res) => {
+  console.log("aaaaa")
+    const {rows} = await pool.query('SELECT * FROM pacientes');
+    res.send(rows);
 
-  const { rows } = await pool.query('SELECT * FROM pacientes');
-  res.json(rows);
+});
+
+
+router.delete('/borrarpacientes', async (req, res) => {
+  const { nombre, apellido, numid } = req.body;
+  await pool.query(
+    `DELETE FROM pacientes WHERE numid='${numid}';`
+  );
+  res.send('BORRADO');
+});
+
+router.post('/actualizarpacientes', async (req, res) => {
+  const { nombre, apellido, numid } = req.body;
+  await pool.query(
+    `UPDATE pacientes SET nombre = '${nombre}', apellido = '${apellido}', numid = '${numid}' WHERE numid='${numid}';`
+  );
+  res.send('MODIFICADO');
 });
